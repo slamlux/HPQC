@@ -1,7 +1,8 @@
+
 import sys
 import time
 
-def main(): 
+def main():
     output = 0
     # checks if there are the right number of arguments
     try:
@@ -15,15 +16,17 @@ def main():
     start_time = time.time()
     # iterates over all numbers up to the input
     for i in range(in_arg):
-        # prints the index
-        print("{}, ".format(i), end="")
+         with open('data#/test.txt', 'a') as sys.stdout:
+        	# prints the index
+                print("{}, ".format(i), end="")
     # gets the end time for the loop
     end_time = time.time()
 
     # gets the total time
     run_time = end_time - start_time
     # prints the output
-    print("\n\nTime for loop: {} seconds\n".format(run_time))
 
+    with open('data#/test.txt', 'a') as sys.stdout:
+    	print("\n\nTime for loop: {} seconds\n".format(run_time))
 if __name__ == "__main__":
     main()
