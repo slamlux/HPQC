@@ -1,5 +1,5 @@
-# HPQC Week2
-
+# HPQC Week2 
+ complete readme also in week2_tasks directory
 Hello world:
 Running the hello world program in python and c both took relatively short times but the C code ran the code 9 times faster than the python code shown in the real line with both programs taking a similar amount of time sys line, the main difference being in the user line where the python code took 0.022 seconds and the C code took 0 seconds.
 
