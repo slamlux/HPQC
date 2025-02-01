@@ -17,7 +17,12 @@ int main(int argc, char **argv)
 	if (argc == 2)
 	{
 		// converts the first argument to an integer
-		input = atoi(argv[1]);
+		//input = atoi(argv[1]);
+		File* file_handle;
+		file_handle = fopen(argv[1], "r");
+		char* input;
+		fgets(input, 1, file_handle);
+		fclose(file_handle);
 	}
 	else //(argc != 2)
 	{
