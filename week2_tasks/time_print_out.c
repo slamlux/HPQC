@@ -32,20 +32,9 @@ int main(int argc, char **argv)
 	// iterates over all numbers up the input
 	
 	// prints the index to a file
-	void print(const int *v, const int input) {
- 		 FILE *fpIn;
- 		 fpIn = fopen("C:\Users\lmazz\Documents\HPQC\binoutput_c.txt", "a");
- 		 int i;  
- 		 if (v != 0) {
-   		   for (i = 0; i < input; i++) {
-			printf("%d, ", i);
-     			fprintf(fpIn, "%d, ", i);   
-   		   }
-   		   //perm_count++;
-   		   printf("\n");
- 		 }
- 		 fclose(fpIn);
-	} 
+   	for (i = 0; i < input; i++) {
+		printf("%d, ", i);   
+   	}
 	
 	// gets the time after the loop
         timespec_get(&end_time, TIME_UTC);
