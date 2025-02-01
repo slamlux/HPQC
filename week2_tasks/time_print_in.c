@@ -8,7 +8,7 @@ struct timespec calculate_runtime(struct timespec start_time, struct timespec en
 int main(int argc, char **argv) 
 {
 	// creates and initialises the variables
-	int i, input;
+	int i, input, number;
 	i = input = 0;
 	struct timespec start_time, end_time, time_diff;
 	double runtime = 0.0;
@@ -18,10 +18,9 @@ int main(int argc, char **argv)
 	{
 		// converts the first argument to an integer
 		//input = atoi(argv[1]);
-		File* file_handle;
+		FILE* file_handle;
 		file_handle = fopen(argv[1], "r");
-		char* input;
-		fgets(input, 1, file_handle);
+		fscanf(file_handle, "%d", & number);
 		fclose(file_handle);
 	}
 	else //(argc != 2)
@@ -35,7 +34,7 @@ int main(int argc, char **argv)
 	// gets the time before the loop
 	timespec_get(&start_time, TIME_UTC);
 	// iterates over all numbers up the input
-	for (i = 0; i < input; i++)
+	for (i = 0; i < number; i++)
 	{
 		// prints the index
 		printf("%d, ", i);
