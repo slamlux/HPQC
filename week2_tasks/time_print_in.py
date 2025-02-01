@@ -4,7 +4,7 @@ import sys
 import time
 
 def main():
-    with open('data#/number_10.txt', 'r') as sys.stdin:
+    with open(str(sys.argv[1]), 'r') as sys.stdin:
         for line in sys.stdin:
             if 'Exit' == line.rstrip():
                break
@@ -21,9 +21,8 @@ def main():
     start_time = time.time()
     # iterates over all numbers up to the input
     for i in range(in_arg):
-        with open('data#/print2.txt', 'a') as sys.stdout:
-            # prints the index
-            print("{}, ".format(i), end="")
+        # prints the index
+        print("{}, ".format(i), end="")
     # gets the end time for the loop
     end_time = time.time()
 
@@ -31,8 +30,7 @@ def main():
     run_time = end_time - start_time
     # prints the output
 
-    with open('data#/print2.txt', 'a') as sys.stdout:
-    	print("\n\nTime for loop: {} seconds\n".format(run_time))
+    print("\n\nTime for loop: {} seconds\n".format(run_time))
 
 if __name__ == "__main__":
     main()
