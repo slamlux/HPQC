@@ -32,9 +32,19 @@ int main(int argc, char **argv)
 	// iterates over all numbers up the input
 	
 	// prints the index to a file
-   	for (i = 0; i < input; i++) {
-		printf("%d, ", i);   
-   	}
+	void print(const int input) {
+ 		 FILE *fpIn;
+ 		 fpIn = fopen("data#/output_c.txt", "a");
+ 		 int i
+   		   for (i = 0; i < input; i++) {
+			printf("%d, ", i);
+     			fprintf(fpIn, "%d, ", i);   
+   		   }
+   		   //perm_count++;
+   		   printf("\n");
+ 		 }
+ 		 fclose(fpIn);
+	} 
 	
 	// gets the time after the loop
         timespec_get(&end_time, TIME_UTC);
