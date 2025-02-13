@@ -1,21 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <mpi.h>
 
 // declares the functions that will be called within main
 // note how declaration lines are similar to the initial line
 // of a function definition, but with a semicolon at the end;
+//time the function
 double to_second_float(struct timespec in_time);
 struct timespec calculate_runtime(struct timespec start_time, struct timespec end_time);
+//for vectors
 int check_args(int argc, char **argv);
 void initialise_vector(int vector[], int size, int initial);
 void print_vector(int vector[], int size);
 int sum_vector(int vector[], int size);
 void non_trivial_vector(int vector[], int size);
+void subdivision_of_vector(int vector[], int vector2[], int start, int stop);
+// for mpi
+int root_task(int uni_size);
+void client_task(int my_rank, int num_arg, int uni_size, int my_vector[]);
+void check_uni_size(int uni_size);
+void check_task(int uni_size, int my_rank, int num_arg, int vector[]);
+
 
 
 int main(int argc, char **argv)
 {
+	// declare and initialise error handling variable
+	int ierror = 0;
+	
 	// declare and initialise the numerical argument variable
 	int num_arg = check_args(argc, argv);
 	
@@ -24,6 +37,19 @@ int main(int argc, char **argv)
 	// get time before the sum 
 	timespec_get(&start_time, TIME_UTC);
 
+	// intitalise MPI
+	ierror = MPI_Init(&argc, &argv);
+
+	// declare and initialise rank and size varibles
+	int my_rank, uni_size;
+	my_rank = uni_size = 0;
+
+	// gets the rank and world size
+	ierror = MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+	ierror = MPI_Comm_size(MPI_COMM_WORLD, &uni_size);
+	
+	// checks the universe size is correct
+	check_uni_size(uni_size);
 
 	// creates a vector variable
 	// int my_vector[num_arg]; // suffers issues for large vectors
@@ -36,26 +62,29 @@ int main(int argc, char **argv)
 	non_trivial_vector(my_vector, num_arg);
 
 
-	// sums the vector
-	int my_sum = sum_vector(my_vector, num_arg);
+	// checks what task to do and does it
+	check_task(uni_size, my_rank, num_arg, my_vector);
+
 	// get time at the end of the sum
-        timespec_get(&end_time, TIME_UTC);
+        //timespec_get(&end_time, TIME_UTC);
 
 	// calculates the runtime
-	time_diff = calculate_runtime(start_time, end_time);
-	runtime = to_second_float(time_diff);
+	//time_diff = calculate_runtime(start_time, end_time);
+	//runtime = to_second_float(time_diff);
 
-	// prints the sum
-	printf("Sum: %d\n", my_sum);
 
 	// outputs the runtime
-	printf("\n\nRuntime for core loop: %lf seconds.\n\n", runtime);
+	//printf("\n\nRuntime for core loop: %lf seconds.\n\n", runtime);
 
-
+	//print_vector(my_vector, num_arg);
 	// if we use malloc, must free when done!
-	free(my_vector);
 
+
+	// finalise MPI
+	ierror = MPI_Finalize();
+	free(my_vector);
 	return 0;
+
 }
 
 // defines a function to sum a vector of ints into another int
@@ -96,6 +125,19 @@ void non_trivial_vector(int vector[], int size)
 		vector[i] = i+2;
 	}
 }
+
+void subdivision_of_vector(int vector[], int vector2[], int start, int stop)
+{
+	int* var;
+	// iterates through the vector
+	for (int i = 0; i < stop; i++)
+	{
+		var = &vector[start + i];
+		// sets the elements of the vector to the initial value
+		vector2[i] = *var;
+	}
+}
+
 
 
 // defines a function to print a vector of ints
@@ -174,5 +216,104 @@ struct timespec calculate_runtime(struct timespec start_time, struct timespec en
 	time_diff.tv_nsec = nanoseconds;
 
 	return time_diff;
+}
+
+//start mpi
+int root_task(int uni_size)
+{
+
+	// creates and initialies transmission variables
+	int recv_message, count, source, tag;
+	recv_message = source = tag = 0;
+	count = 1;
+	MPI_Status status;
+
+	// creates and intiialises the variable for the final output
+	int output_sum = 0;
+	
+	// iterates through all the other ranks
+	for (source = 1; source < uni_size; source++)
+	{
+		// receives the messages
+		MPI_Recv(&recv_message, count, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
+		//printf('&d/n', source);
+		// adds the values to a running tally
+		output_sum += recv_message;
+	} // end for (source = 1; source < uni_size; source++)
+
+	// outputs and returns the result
+	printf("The combined result is %d\n", output_sum);
+	return output_sum;
+}
+
+void client_task(int my_rank, int num_arg, int uni_size, int my_vector[])
+{
+	// creates and initialies transmission variables
+	int send_message, count, dest, tag;
+	send_message = dest = tag = 0;
+	count = 1;
+
+	// sets the destination for the message
+	dest = 0; // destination is root
+	int chunk, start, stop;
+	chunk = start = stop = 0;
+	chunk = num_arg/(uni_size-1);
+	start = (my_rank-1) * chunk;
+	stop =  my_rank *chunk;
+
+
+	// creates a vector variable
+	int* vector_sub = malloc (chunk * my_rank * sizeof(int));
+	//initialise_vector(vector_sub, chunk, 0);
+	// and initialises every element to zero
+	subdivision_of_vector(my_vector, vector_sub, start, stop);
+	//print_vector(vector_sub,chunk);
+
+	// sums the vector
+	int my_sum = sum_vector(vector_sub, chunk);
+	//printf("%d\n", my_sum);
+	
+	// creates the message
+	send_message = my_sum;
+	free(vector_sub);
+
+	// sends the message
+	MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
+	
+	return;
+}
+
+
+void check_uni_size(int uni_size)
+{
+	// sets the minimum universe size
+	int min_uni_size = 1;
+	// checks there are sufficient tasks to communicate with
+	if (uni_size >= min_uni_size)
+	{
+		return;
+	} // end if (uni_size >= min_uni_size)
+	else // i.e. uni_size < min_uni_size
+	{
+		// Raise an error
+		fprintf(stderr, "Unable to communicate with fewer than %d processes.", min_uni_size);
+		fprintf(stderr, "MPI communicator size = %d\n", uni_size);
+
+		// and exit COMPLETELY
+		exit(-1);
+	}
+}
+
+void check_task(int uni_size, int my_rank, int num_arg, int vector[])
+{
+	// checks which process is running and calls the appropriate task
+	if (0 == my_rank)
+	{
+		root_task(uni_size);
+	} // end if (0 == my_rank)
+	else // i.e. (0 != my_rank)
+	{
+		client_task(my_rank, num_arg, uni_size, vector);
+	} // end else // i.e. (0 != my_rank)
 }
 
