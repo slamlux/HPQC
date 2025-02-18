@@ -3,6 +3,7 @@
 
 void main_task(int uni_size, int source, int rank);
 void client_task(int uni_size, int my_rank);
+void run_tasks(int uni_size, int my_rank);
 
 int main(int argc, char **argv) 
 {
@@ -28,22 +29,9 @@ int main(int argc, char **argv)
 	
 	if (uni_size > 1)
 	{
-		if (0 == my_rank)
-		{
-			// iterates through all the other ranks
-			for (int their_rank = 1; their_rank < uni_size; their_rank++)
-			{
-				// function that receives all the messages
-				main_task(uni_size, their_rank, my_rank);			
-			
-			} // end for (int their_rank = 1; their_rank < uni_size; their_rank++)
-		} // end if (0 == my_rank)
-		else // i.e. (0 != my_rank)
-		{
-			
-			client_task(uni_size, my_rank);
 
-		} // end else // i.e. (0 != my_rank)
+		run_tasks(uni_size, my_rank);
+
 	} // end if (uni_size > 1)
 	else // i.e. uni_size <=1
 	{
@@ -100,5 +88,28 @@ void client_task(int uni_size, int my_rank)
         printf("Hello, I am %d of %d. Sent %d to Rank %d\n",
                              my_rank, uni_size, send_message, dest);
 
+
+}
+
+
+void run_tasks(int uni_size, int my_rank)
+{
+
+	if (0 == my_rank)
+	{
+		// iterates through all the other ranks
+		for (int their_rank = 1; their_rank < uni_size; their_rank++)
+		{
+			// function that receives all the messages
+			main_task(uni_size, their_rank, my_rank);			
+		
+		} // end for (int their_rank = 1; their_rank < uni_size; their_rank++)
+	} // end if (0 == my_rank)
+	else // i.e. (0 != my_rank)
+	{
+			
+		client_task(uni_size, my_rank);
+
+	} // end else // i.e. (0 != my_rank)
 
 }
