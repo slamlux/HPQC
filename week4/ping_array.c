@@ -62,7 +62,7 @@ void main_task(int uni_size, int source, int rank, int counter, int num_pings, l
 	long* send_message = malloc (size * sizeof(long));
 	initialise_vector(send_message, size, 0);
 
-	long* recv_message = malloc (count * sizeof(long));
+	long* recv_message = malloc (size * sizeof(long));
 	initialise_vector(recv_message, size, 0);
 
 
