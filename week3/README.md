@@ -28,7 +28,7 @@ to run from the home directory:#
 
 compile vector_serial_mpi.c :
 
-	mpicc v.c -o bin/vector_serial_mpi
+	mpicc vector_serial_mpi.c -o bin/vector_serial_mpi
 
 to run from the home directory:
 
