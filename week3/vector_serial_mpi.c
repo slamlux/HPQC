@@ -13,7 +13,7 @@ struct timespec calculate_runtime(struct timespec start_time, struct timespec en
 int check_args(int argc, char **argv);
 void initialise_vector(int vector[], int size, int initial);
 void print_vector(int vector[], int size);
-int sum_vector(int vector[], int size);
+int sum_vector(int vector[], int size, int start, int stop);
 void non_trivial_vector(int vector[], int size);
 void subdivision_of_vector(int vector[], int vector2[], int start, int stop);
 // for mpi
@@ -88,13 +88,13 @@ int main(int argc, char **argv)
 }
 
 // defines a function to sum a vector of ints into another int
-int sum_vector(int vector[], int size)
+int sum_vector(int vector[], int size, int start, int stop)
 {
 	// creates a variable to hold the sum
 	int sum = 0;
 
 	// iterates through the vector
-	for (int i = 0; i < size; i++)
+	for (int i = start; i < stop; i++)
 	{
 		// sets the elements of the vector to the initial value
 		sum += vector[i];
@@ -260,22 +260,22 @@ void client_task(int my_rank, int num_arg, int uni_size, int my_vector[])
 	chunk = num_arg/(uni_size-1);
 	start = (my_rank-1) * chunk;
 	stop =  my_rank *chunk;
+	if (my_rank == uni_size-1)
+	{
+		stop = num_arg;
+	}
 
-
-	// creates a vector variable
-	int* vector_sub = malloc (chunk * my_rank * sizeof(int));
-	//initialise_vector(vector_sub, chunk, 0);
 	// and initialises every element to zero
-	subdivision_of_vector(my_vector, vector_sub, start, stop);
+	//subdivision_of_vector(my_vector, vector_sub, start, stop);
 	//print_vector(vector_sub,chunk);
 
 	// sums the vector
-	int my_sum = sum_vector(vector_sub, chunk);
+	int my_sum = sum_vector(my_vector, chunk, start, stop);
 	//printf("%d\n", my_sum);
 	
 	// creates the message
 	send_message = my_sum;
-	free(vector_sub);
+	//free(vector_sub);
 
 	// sends the message
 	MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
