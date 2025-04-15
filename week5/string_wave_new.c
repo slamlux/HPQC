@@ -176,9 +176,10 @@ void initialise_vector(double vector[], int size, double initial)
 // defines a function to initialise all values in a vector to a given inital value
 void initialise_x_pos(double vector[], int size, double initial)
 {
-	double j = 0.0;
+	vector[0] = 0.0;
+	double j = 1.0;
 	// iterates through the vector
-	for (int i = 0; i < size; i++)
+	for (int i = 1; i < size; i++)
 	{
 		
 		// sets the elements of the vector to the initial value
