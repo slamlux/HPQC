@@ -271,6 +271,7 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 
 
 	sub_positions_y[0] = driver(time_stamps[time_steps]);
+	sub_positions_x[0] = 0;
 	// creates new positions by setting value of previous element
 	for (int i = 1; i < chunk; i++)
 	{
