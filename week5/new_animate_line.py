@@ -324,7 +324,7 @@ def main():
     times, interval, fps = configure_animation(frame_count=num_times)
 
     # sets up the points on the string 
-    x_positions, y_positions = extract_position(data)
+    x_positions, y_positions = extract_position(data, datax)
 
     # configures the initial state of the plot, including x and y positions of points on the string
     fig, rope = configure_plot(x_positions, y_positions)
