@@ -299,28 +299,30 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 	MPI_Gather(sub_positions_x, chunk, MPI_DOUBLE, x_pos, chunk, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Gather(sub_velocity_y, chunk, MPI_DOUBLE, vy, chunk, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Gather(sub_velocity_x, chunk, MPI_DOUBLE, vx, chunk, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	double try = positions[3];
-	//printf("Gathering %f \n", try);
-	//print_vector(positions, (points+chunk+2));
-	//print_header(&out_file, points);
-	//fprintf(out_file, ", %lf", positions[3]);
+
 	// iterates through each time step in the collection	
 	// creates a file
 	FILE* out_file;
+	FILE* out_filex;
+     	out_filex = fopen("data/xpos.csv","a");
      	out_file = fopen(argv[1],"a");
 
 	// prints an index and time stamp
 	fprintf(out_file, "%d, %lf", time_steps, time_stamps[time_steps]);
+	fprintf(out_filex, "%d, %lf", time_steps, time_stamps[time_steps]);
 	// iterates over all of the points on the line
 	for (int j = 0; j < points; j++)
 	{
 		// prints each y-position to a file
 		double print = positions[j];
+		double p = x_pos[j];
 		//printf("Gathering %f \n", print);
 		fprintf(out_file, ", %lf", print);
+		fprintf(out_filex, ", %lf", p);
 	}
 	// prints a new line
 	fprintf(out_file, "\n");
+	fprintf(out_filex, "\n");
 	// closes the file
 		
 	
@@ -330,6 +332,7 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 
 	// closes the file
 	fclose(out_file);
+	fclose(out_filex);
 
 
 
@@ -477,10 +480,13 @@ void run_tasks(int uni_size, int points, int my_rank, double positions[], double
 	if (0 == my_rank)
 	{
 		FILE* out_file;
+		FILE* out_filex;
      		out_file = fopen(argv[1],"a");
+		out_filex = fopen("data/xpos.csv","a");
 		print_header(&out_file, points);
-
+		print_header(&out_filex, points);
 		fclose(out_file);
+		fclose(out_filex);
 	}
 
 	for (int i = 0; i < time_steps; i++)
