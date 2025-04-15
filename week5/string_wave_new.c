@@ -241,16 +241,16 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 
 	// creates a vector for the time stamps in the data
 	double* sub_positions_y = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_positions_y, chunk, 2.0);
+	initialise_vector(sub_positions_y, chunk, 0.0);
 
 	double* sub_positions_x = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_positions_x, chunk, 2.0);
+	initialise_vector(sub_positions_x, chunk, 0.0);
 
 	double* sub_velocity_y = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_velocity_y, chunk, 2.0);
+	initialise_vector(sub_velocity_y, chunk, 0.0);
 
 	double* sub_velocity_x = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_velocity_y, chunk, 2.0);
+	initialise_vector(sub_velocity_y, chunk, 0.0);
         double t = time_stamps[1];
 	double k=0.1;
 	double m=0.06;	
