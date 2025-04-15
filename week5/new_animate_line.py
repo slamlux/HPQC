@@ -41,7 +41,7 @@ def execute_time_step(data, rope, i):
         time (float): the current time in the animation
     """
     # updates the positions
-    x_positions, y_positions = extract_position(data, i=i)
+    x_positions, y_positions = extract_position(data, datax, i=i)
 
     # updates the plotted data in the animation
     rope.set_data(x_positions, y_positions)
@@ -80,7 +80,7 @@ def animate(time, data, rope):
             trailing comma. 
     """
     # updates the positions
-    x_positions, y_positions = extract_position(data, i=time)
+    x_positions, y_positions = extract_position(data, datax, i=time)
 
     # updates the plotted data in the animation
     rope.set_data(x_positions, y_positions)
