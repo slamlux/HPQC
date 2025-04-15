@@ -30,7 +30,7 @@ def generate_path(home_folder = str(Path.home()), subfolder = '/data/', basename
     output_path = output_folder + filename  # creates the output path
     return output_path
 
-def execute_time_step(data, rope, i):
+def execute_time_step(data, datax, rope, i):
     """This function carries out the update process for the animation.  
     All points on the string 'follow the leader', except for point 0, 
     which is 'driven' by in a simple harmonic oscillator
@@ -63,7 +63,7 @@ def reset_plots(rope, y_positions):
     rope.set_data(x_positions, y_positions)
 
 
-def animate(time, data, rope):
+def animate(time, data, datax, rope):
     """This function carries out the animation steps and resets the 
     plots at the start of the loop if allowed to run.
 
