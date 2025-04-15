@@ -413,10 +413,10 @@ void client_task(int uni_size, int my_rank, double time, int points)
 	// creates new positions by setting value of previous element 
 	for (int i = 0; i < chunk; i++)
 	{
-		double dy1 = positions[i] - positions[i-1];
-		double dy2 = positions[i+1] - positions[i];
-		double dx1 = x_pos[i] - x_pos[i-1];
-		double dx2 = x_pos[i+1] - x_pos[i];
+		double dy1 = positions[star+i] - positions[start+i-1];
+		double dy2 = positions[start + i+1] - positions[start+i];
+		double dx1 = x_pos[start+i] - x_pos[start+i-1];
+		double dx2 = x_pos[start+i+1] - x_pos[start+i];
 		double dl1 = sqrt(dx1*dx1 + dy1*dy1) - l;
 		double dl2 = sqrt(dx2*dx2 + dy2*dy2) - l;
 	
