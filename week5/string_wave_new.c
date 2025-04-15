@@ -284,8 +284,8 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 	
 		double angle1 = atan(abs(dy1/dx1));
 		double angle2 = atan(abs(dy2/dx2));
-		double ax = (cos(angle1)*(-k*dl1) + cos(angle2)*(-k*dl2))/m;
-		double ay = (sin(angle1)*(-k*dl1) + sin(angle2)*(-k*dl2))/m;
+		double ax = (cos(angle1)*(-k*dl1) + cos(angle2)*(k*dl2))/m;
+		double ay = (sin(angle1)*(-k*dl1) + sin(angle2)*(k*dl2))/m;
 		sub_velocity_x[i] = ax*t+vx[i];
 		sub_velocity_y[i] = ay*t+vy[i];
 		sub_positions_y[i] = 0.5* ay*t*t + vx[i]*t + positions[i];
@@ -422,8 +422,8 @@ void client_task(int uni_size, int my_rank, double time, int points)
 	
 		double angle1 = atan(abs(dy1/dx1));
 		double angle2 = atan(abs(dy2/dx2));
-		double ax = (cos(angle1)*(-k*dl1) + cos(angle2)*(-k*dl2))/m;
-		double ay = (sin(angle1)*(-k*dl1) + sin(angle2)*(-k*dl2))/m;
+		double ax = (cos(angle1)*(-k*dl1) + cos(angle2)*(k*dl2))/m;
+		double ay = (sin(angle1)*(-k*dl1) + sin(angle2)*(k*dl2))/m;
 		sub_velocity_x[i] = ax*t+vx[i];
 		sub_velocity_y[i] = ay*t+vy[i];
 		sub_positions_y[i] = 0.5* ay*t*t+ vx[start+i]*t + positions[start+i];
