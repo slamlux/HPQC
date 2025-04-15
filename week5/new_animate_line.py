@@ -331,7 +331,7 @@ def main():
 
     # initialises the python animation 
     ani = animation.FuncAnimation(fig, animate, num_times, interval=interval, blit=True, # mandatory animation arguments
-                                  fargs=(data, rope)) # arguments to the animate function
+                                  fargs=(data, datax, rope)) # arguments to the animate function
 
     # saves the animation to disk
     filename = generate_path(basename = sys.argv[2], extension = 'gif')
