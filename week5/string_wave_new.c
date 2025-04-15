@@ -288,8 +288,8 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 		double ay = (sin(angle1)*(-k*dl1) + sin(angle2)*(-k*dl2))/m;
 		sub_velocity_x[i] = ax*t+vx[i];
 		sub_velocity_y[i] = ay*t+vy[i];
-		sub_positions_y[i] = 0.5* ay*t*t + vx[i]*t*0 + positions[i];
-		sub_positions_x[i] = 0.5* ax*t*t + vy[i]*t*0 + x_pos[i];
+		sub_positions_y[i] = 0.5* ay*t*t + vx[i]*t + positions[i];
+		sub_positions_x[i] = 0.5* ax*t*t + vy[i]*t + x_pos[i];
 
 		//printf("Received st %f \n", try);
 	}
@@ -371,16 +371,16 @@ void client_task(int uni_size, int my_rank, double time, int points)
 
 	// creates a vector for the time stamps in the data
 	double* sub_positions_y = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_positions_y, chunk, 2.0);
+	initialise_vector(sub_positions_y, chunk, 0.0);
 
 	double* sub_positions_x = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_positions_x, chunk, 2.0);
+	initialise_vector(sub_positions_x, chunk, 0.0);
 
 	double* sub_velocity_y = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_velocity_y, chunk, 2.0);
+	initialise_vector(sub_velocity_y, chunk, 0.0);
 
 	double* sub_velocity_x = (double*) malloc(chunk* sizeof(double));
-	initialise_vector(sub_velocity_y, chunk, 2.0);
+	initialise_vector(sub_velocity_y, chunk, 0.0);
 
 	// creates a vector variable for the current positions
 	double* positions = (double*) malloc(points * sizeof(double));
@@ -402,8 +402,7 @@ void client_task(int uni_size, int my_rank, double time, int points)
 	double runtime = 0.0;
 	// get time before the sum 
 	timespec_get(&start_time, TIME_UTC);
-	double try2 = positions[0];
-	//printf("%f at time %f \n", try2, time);
+
 
 	//broadcast
 	MPI_Bcast(positions, points, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -411,8 +410,6 @@ void client_task(int uni_size, int my_rank, double time, int points)
 	MPI_Bcast(vy, points, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	MPI_Bcast(vx, points, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-	double try = positions[0];
-	//printf("Received st %f \n", try);
 	// creates new positions by setting value of previous element 
 	for (int i = 0; i < chunk; i++)
 	{
@@ -429,8 +426,8 @@ void client_task(int uni_size, int my_rank, double time, int points)
 		double ay = (sin(angle1)*(-k*dl1) + sin(angle2)*(-k*dl2))/m;
 		sub_velocity_x[i] = ax*t+vx[i];
 		sub_velocity_y[i] = ay*t+vy[i];
-		sub_positions_y[i] = 0.5* ay*t*t+ vx[start+i]*t*0 + positions[start+i];
-		sub_positions_x[i] = 0.5* ax*t*t + vy[start+i]*t*0 + x_pos[start+i];
+		sub_positions_y[i] = 0.5* ay*t*t+ vx[start+i]*t + positions[start+i];
+		sub_positions_x[i] = 0.5* ax*t*t + vy[start+i]*t + x_pos[start+i];
 
 		//printf("Received st %f \n", try);
 	}
