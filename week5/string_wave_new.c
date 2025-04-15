@@ -252,7 +252,7 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 	double* sub_velocity_x = (double*) malloc(chunk* sizeof(double));
 	initialise_vector(sub_velocity_y, chunk, 2.0);
         double t = time_stamps[1];
-	double k=190;
+	double k=0.1;
 	double m=0.06;	
 	double l = 1.0;
 	MPI_Status status;
@@ -364,7 +364,7 @@ void client_task(int uni_size, int my_rank, double time, int points)
 	int chunk = points/(uni_size);
 	int start = chunk * (my_rank);
 	double t = 0.04;
-	double k=190;
+	double k=0.1;
 	double m=0.06;	
 	double l = 1.0;
 
