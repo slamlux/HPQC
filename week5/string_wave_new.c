@@ -256,7 +256,7 @@ void main_task(int uni_size, int points, int my_rank, double positions[], double
 	double* sub_velocity_x = (double*) malloc(chunk* sizeof(double));
 	initialise_vector(sub_velocity_y, chunk, 0.0);
         double t = time_stamps[1];
-	double k=0.1;
+	double k=0.5;
 	double m=0.06;	
 	double l = 1.0;
 	MPI_Status status;
@@ -372,7 +372,7 @@ void client_task(int uni_size, int my_rank, double time, int points)
 	int chunk = points/(uni_size);
 	int start = chunk * (my_rank);
 	double t = 0.04;
-	double k=0.1;
+	double k=0.5;
 	double m=0.06;	
 	double l = 1.0;
 
@@ -425,6 +425,7 @@ void client_task(int uni_size, int my_rank, double time, int points)
 		double dy2 = positions[start + i+1] - positions[start+i];
 		double dx1 = x_pos[start+i] - x_pos[start+i-1];
 		double dx2 = x_pos[start+i+1] - x_pos[start+i];
+
 		double dl1 = sqrt(dx1*dx1 + dy1*dy1) - l;
 		double dl2 = sqrt(dx2*dx2 + dy2*dy2) - l;
 	
@@ -432,11 +433,15 @@ void client_task(int uni_size, int my_rank, double time, int points)
 		double angle2 = atan(abs(dy2/dx2));
 		double ax = (cos(angle1)*(k*dl1) + cos(angle2)*(-k*dl2))/m;
 		double ay = (sin(angle1)*(k*dl1) + sin(angle2)*(-k*dl2))/m;
-		sub_velocity_x[i] = ax*t+vx[i];
-		sub_velocity_y[i] = ay*t+vy[i];
+		sub_velocity_x[i] = ax*t+vx[start+i];
+		sub_velocity_y[i] = ay*t+vy[start+i];
 		sub_positions_y[i] = 0.5* ay*t*t+ vx[start+i]*t + positions[start+i-1];
 		sub_positions_x[i] = 0.5* ax*t*t + vy[start+i]*t + x_pos[start+i];
-
+		if (start + i == points -1)
+			{
+				sub_positions_y[chunk -1] = positions[start+i-1];
+				sub_positions_x[chunk- 1] = points-1;
+			}
 		//printf("Received st %f \n", try);
 	}
 
