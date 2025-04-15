@@ -35,6 +35,9 @@ int main(int argc, char **argv)
 	FILE* out_file;
      	out_file = fopen(argv[1],"w");
 	fclose(out_file);
+	FILE* out_filex;
+     	out_filex = fopen("data/xpos.csv","w");
+	fclose(out_filex);
 	// declare and initialise rank and size varibles
 	int my_rank, uni_size;
 	my_rank = uni_size  = 0;
