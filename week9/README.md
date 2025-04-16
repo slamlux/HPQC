@@ -9,13 +9,13 @@ Comp_implementation.py is a complete implementation of Graver's search algorithm
 
 It can be run with the following command:
 
-    python3 HPQC/week9/Comp_implementation.py
+    python3 HPQC/week9/comp_implementation.py
 
 Min_iplementation.py is a minimalist implementation of Graver's search algorithm
 
 It can be run with the following command:
 
-    python3 HPQC/week9/Min_iplementation.py
+    python3 HPQC/week9/min_iplementation.py
     
 ## Source
 Code and text taken from: https://enccs.se/tutorials/2024/02/quantum-computing-for-beginners-part-3-gpus/
