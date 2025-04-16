@@ -2,6 +2,16 @@
 ## How to run the code
 Hard coding was removed so to compile the c code :
 
+**The serial version**
+
+    gcc HPQC/week5/string_wave.c -o bin/string_wave -lm
+
+to run the code the iputs are path for output csv file, points, cycles, samples:
+
+    bin/string_wave data/wave2.csv 50 5 25
+
+**For the parallel version**
+
     mpicc HPQC/week5/string_wave_MPI.c -o bin/string_wave_MPI -lm
 
 to run the code the iputs are path for output csv file, points, cycles, samples:
@@ -30,7 +40,9 @@ The result for an input like: mpirun -np 2 bin/string_wave_MPI data/wave2.csv 50
 
 ![](https://github.com/slamlux/HPQC/blob/main/week5/sample_animation.gif)
 
-add if the code is better then cereal
+The graph below shows that the time it takes to run the parallel code increase faster than the serial code as the nuber of points simulated increases meaning the serial code is more affective for this task.
+
+![](https://github.com/slamlux/HPQC/blob/main/week5/Benchmark_string_wave.png)
 
 ### Part 3
 Springs between the points were added to make the simulation more realistic. The driver function is still implemented and travels through the rope, with the addition of small interaction between the neighbour points simulated through springs. 
