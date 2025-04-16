@@ -66,21 +66,6 @@ int main(int argc, char **argv)
 	// checks what task to do and does it
 	check_task(uni_size, my_rank, num_arg, my_vector);
 
-	// get time at the end of the sum
-        //timespec_get(&end_time, TIME_UTC);
-
-	// calculates the runtime
-	//time_diff = calculate_runtime(start_time, end_time);
-	//runtime = to_second_float(time_diff);
-
-
-	// outputs the runtime
-	//printf("\n\nRuntime for core loop: %lf seconds.\n\n", runtime);
-
-	//print_vector(my_vector, num_arg);
-	// if we use malloc, must free when done!
-
-
 	// finalise MPI
 	ierror = MPI_Finalize();
 	free(my_vector);
@@ -243,13 +228,11 @@ int root_task(int uni_size, int num_arg, int my_vector[])
 	int* sub_vector = malloc (1 * sizeof(int));
 	initialise_vector(sub_vector, 1, 0);
 
-	//scatter
+	//reduce
 	MPI_Reduce(sub_vector, vector, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
 	int output_sum = vector[0];
-	// creates and intiialises the variable for the final output
-	
-	// iterates through all the other ranks
+
 
 	// outputs and returns the result
 	printf("The combined result is %d\n", output_sum);
@@ -285,21 +268,15 @@ void client_task(int my_rank, int num_arg, int uni_size, int my_vector[])
 		stop = chunk;
 	}
 
-	//MPI_Recv(recv_message, num_arg, MPI_INT, source, tag, MPI_COMM_WORLD, &status);
+
 
 	// sums the vector
 	int my_sum = sum_vector(my_vector, chunk, start, stop);
 	sub_vector[0]=my_sum;
 	//printf("%d\n", my_sum);
-	//gather
+	//reduce
 	MPI_Reduce(sub_vector, vector, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
-	// creates the message
-	//send_message = my_sum;
-	//free(recv);
-
-	// sends the message
-	//MPI_Send(&send_message, count, MPI_INT, dest, tag, MPI_COMM_WORLD);
 	
 	return;
 }
