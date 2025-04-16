@@ -20,5 +20,9 @@ The ping pong program works as follows:
 The counter starts at zero with the root processor sending the counter to a client directory, the client directory then adds one to the counter and sends it back to the root processor. The process is then repeated until the counter reaches the inputted number of pings.
 
 To measure the bandwidth and latency of the program data was taken for how long it takes for the program to run for various array sizes varying from  8B and 2MiB the data was then plotting providing the following graph:
-![](https://github.com/slamlux/HPQC/edit/main/week4/bandwidth.png)
- The linear fit for the data was the used to determine the slope which corresponds to the bandwidth fitted to be 9.02*10<sup>7</sup> bytes/s and an intercept which is the latency of -5.92*10<sup>4</sup>s with a an error of 5.24*10<sup>4</sup>s the latency measurement isn’t very accurate and thus doesn’t tell much about the latency of the program.
+
+![](https://github.com/slamlux/HPQC/blob/main/week4/bandwidth.png)
+
+The linear fit for the data was the used to determine the slope which corresponds to the bandwidth fitted to be 9.02*10<sup>7</sup> bytes/s and an intercept which is the latency of -5.92 * 10<sup>4</sup>s with a an error of 5.24 * 10<sup>4</sup>s the latency measurement isn’t very accurate and thus doesn’t tell much about the latency of the program.
+### Part 3
+
