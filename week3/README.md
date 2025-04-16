@@ -38,7 +38,19 @@ to run from the home directory:
 The real time remains around 0.4 seconds with user and sys time steadily increasing while adding processors, the sum of the user and sys become more after than the real time after 7 processors.
 The runtimes are much lower in the serial version with real times of 0.002 seconds.
 ### Part 2
-Proof.c operation is sum over number of processors *input.
+**Main():** initialises  the MPI operations, checks the inputted arguments from the command line, then it check if the universe size is of correct dimensions, subsequently it check what tasks each processor has to perform and runs them, lastly it finilizes the MPI operations.
+
+**root_task():** Initialises the transmission variables, then it creates a variable to store the output sum. It iterates through the processors ranks to receive their calculation, and sums over all the received values. Finally it prints out the result of the sum.
+
+**client_task ():** Initialises the transmission variables, sets the destination of the MPI communication to be the root processor. Perform the required calculation (my_rank * num_arg) and send the calculation to the root processor
+
+**Check_args():** check input arguments from the terminal and stops the code if the right number of arguments aren’t called.
+
+**check_uni_size():** set the minimum universe size to be 1, if the inputted universe size is bigger or equal to the minimum universe size then the program continues, otherwise the program is stopped and an error message is shown.
+
+**check_tasks():** runs the root_task() if the rank of the processor is 0, and if the rank of the processor is >0 then it runs the client_task().
+
+Proof.c operation is sum over number of (processors *input).
 ### Part 3
 Serial code breakdown:
 
