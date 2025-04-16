@@ -1,4 +1,11 @@
 # week7
+## How to run the code
+To run the code use the following prompts in the command line:
+
+    python3 HPQC/week7/quantum_com1.py
+or
+
+    python3 HPQC/week7/improved_quantum_com1.py
 ## Part 1: Push a qubit into a stack
 When a new qubit is pushe the size of the stack doubles. Each new qubit is represented by a weight vectror (a,b) the weight satisfy this equations  ∣α∣ <sup>2</sup>  + ∣β∣ <sup>2</sup> =1, this makes sure that qubit only has a value of 0 or 1 once the wavefunction collapses.
 To implement this the qubit workspace has to be reshaped into (1 x N <sup>2</sup>) a row vector and subsequently using the kron function in numpy to get the new weight vector.
@@ -13,3 +20,5 @@ To measure a qubit one has to collapse the wavefunction. The qubits are represen
 
 An simulation of the AND gate can be done by using qubits by appliyng the Hadamrd gate to two 0 qubits so that the probaility of the 0 or 1 outcomes are equal and subsequently use a Toffoli gate on athird 0 qubit which performs the AND gate operation between qubit 1 and qubit 2. An AND gate truth table can be shown by printing all 3 measuremnts of the qubits.
 The full truth table can take many iterations to be shown as the qubits are in a random state and the program could output the same measuremnt twice. This is one of the main problems with quantum computers they can most of the time get the result that is looked for but it might take multiple iterations. So it can output incorrect results due to it's probabilistic nature making it less accurate.
+## Source 
+Code and text taken from: https://enccs.se/tutorials/2024/02/quantum-computing-for-beginners-part-1/
